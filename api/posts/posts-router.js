@@ -7,7 +7,7 @@ const router = express.Router();
 
 //ENDPOINTS HERE
 
-//[GET] /api/posts (R of CRUD) returns an array of all post objects contained in the database
+//[GET] /api/posts (R of CRUD) returns an array of all posts
 
 router.get("/", (req, res) => {
   Posts.find()
@@ -59,7 +59,7 @@ router.post("/", (req, res) => {
   }
 });
 
-//[PUT] /api/posts/:id (U of CRUD) update post with specific id
+//[PUT] /api/posts/:id (U of CRUD) updates post with specific id
 
 router.put("/:id", (req, res) => {
   const changes = req.body;
@@ -81,13 +81,32 @@ router.put("/:id", (req, res) => {
       })
       .catch((error) => {
         console.log(error);
-        res
-          .status(500)
-          .json({
-            message: "There was an error while saving the post to the database",
-          });
+        res.status(500).json({
+          message: "There was an error while saving the post to the database",
+        });
       });
   }
 });
+
+//[DELETE] /api/posts/:id (D of CRUD) Deletes a post with the specified id
+
+router.delete("/:id", (req, res) => {
+  Posts.remove(req.params.id)
+    .then((count) => {
+      if (count > 0) {
+        res.status(200).json({ message: "This post has been deleted" });
+      } else {
+        res
+          .status(404)
+          .json({ message: "The post with the specified ID does not exist" });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: "The post could not be removed" });
+    });
+});
+
+//[GET] /api/posts/:id/comments
 
 module.exports = router;
