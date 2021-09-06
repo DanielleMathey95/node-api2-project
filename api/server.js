@@ -1,19 +1,17 @@
 // implement your server here
 // require your posts router and connect it here
 const express = require("express");
-const postsRouter = require("./posts/posts-router");
-
 const server = express();
-
 server.use(express.json());
 
-server.use("/api/posts", postsRouter);
+const postsRouter = require("./posts/posts-router");
+server.use('/api/posts', postsRouter)
 
-server.use("*", (req, res) => {
-  console.log("* default catch all");
-  res.status(404).json({
-    message: "this is your catch all server",
-  });
-});
 
+server.get('/', (req, res) => {
+  res.send(`
+  <h2>Backend Module 2 Assignment</h2>
+  <p>Welcome to your server</p>
+  `)
+})
 module.exports = server;
