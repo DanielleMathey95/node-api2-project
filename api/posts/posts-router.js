@@ -107,6 +107,25 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-//[GET] /api/posts/:id/comments
+//[GET] /api/posts/:id/comments (R of CRUD) gets comments with the specified id
+
+router.get("/:id/comments", (req, res) => {
+  Posts.findPostComments(req.params.id)
+    .then((comments) => {
+      if (comments.length > 0) {
+        res.status(200).json(comments);
+      } else {
+        res
+          .status(404)
+          .json({ message: "The post with the specified ID does not exist" });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res
+        .status(500)
+        .json({ message: "The comments information could not be retrieved" });
+    });
+});
 
 module.exports = router;
